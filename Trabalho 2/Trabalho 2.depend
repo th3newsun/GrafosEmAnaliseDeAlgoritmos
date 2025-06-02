@@ -1,17 +1,18 @@
 # depslib dependency file v1.0
-1748825680 source:c:\users\aluno\onedrive\Área de trabalho\trabalho análise de algoritmos\driver.cpp
+1748831718 source:c:\users\aluno\onedrive\Área de trabalho\trabalho análise de algoritmos\driver.cpp
 	"Grafo.h"
 	<iostream>
 	<string>
 
-1748825501 c:\users\aluno\onedrive\Área de trabalho\trabalho análise de algoritmos\grafo.h
+1748830737 c:\users\aluno\onedrive\Área de trabalho\trabalho análise de algoritmos\grafo.h
 	<string>
 	<fstream>
 
-1748825672 source:c:\users\aluno\onedrive\Área de trabalho\trabalho análise de algoritmos\grafo.cpp
+1748832291 source:c:\users\aluno\onedrive\Área de trabalho\trabalho análise de algoritmos\grafo.cpp
 	"Grafo.h"
 	<iostream>
 	<string>
 	<fstream>
+	<queue>
 	<sstream>
 

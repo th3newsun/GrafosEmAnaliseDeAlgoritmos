@@ -1,7 +1,7 @@
 /*
 Denilson Aparecido Gonçalves Junior - 2176481
 Thaynara Santos Ramos - 2126966
-
+Fernando Peres Borin - 2125219
 */
 #include <string>
 #include <fstream>
@@ -17,6 +17,8 @@ public:
     void Ler(string arquivo);
     void ImprimirLista();
     void ImprimirVetor();
+    void BuscaEmLargura(string inicio);
+
 private:
     struct Vertice{
         string indice;
@@ -37,6 +39,8 @@ public:
     void ImprimirLista();
     void ImprimirVetor();
     void ImprimirMatriz();
+    void BuscaEmProfundidade(string inicio);
+
 private:
     struct Vertice{
         string indice;
@@ -48,6 +52,8 @@ private:
     void Inserir(ifstream &entrada);
     void Listar(string indiceDoVertice, int i);
     void ImprimirLista(Vertice *vertice);
+    void BuscaEmProfundidade(int indice, bool *visitados, bool &primeiro);
+
 };
 
 class GrafoPonderado{
@@ -57,7 +63,6 @@ public:
     void Ler(string arquivo);
     void ImprimirLista();
     void ImprimirMatriz();
-
 private:
     struct Vertice{
         string indice;
@@ -70,6 +75,7 @@ private:
     void Inserir(ifstream &entrada);
     void Listar(string indiceDoVertice, int i, string peso);
     void ImprimirLista(Vertice *vertice);
+
 };
 
 #endif
