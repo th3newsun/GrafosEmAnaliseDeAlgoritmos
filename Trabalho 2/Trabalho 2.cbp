@@ -32,8 +32,8 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Unit filename="../Driver.cpp" />
-		<Unit filename="../Tree.cpp" />
-		<Unit filename="../Tree.h" />
+		<Unit filename="../Grafo.cpp" />
+		<Unit filename="../Grafo.h" />
 		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

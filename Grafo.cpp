@@ -11,150 +11,314 @@ Thaynara Santos Ramos - 2126966
 using namespace std;
 
 GrafoSimples::GrafoSimples(){
-    raiz = NULL;
-    GrafoSimples::Vertices[i] = {};
+    numDeVertices = 0;
 }
 GrafoSimples::~GrafoSimples(){
-    Limpar(raiz);
 }
-void GrafoSimples::Limpar(Vertice &raiz){
-    if(raiz == NULL)
-        return;
-    if(raiz->LeftNode != NULL)
-        Clear(r->LeftNode);
-    if(raiz->RightNode != NULL)
-        Clear(r->RightNode);
-    TreePointer q = r;
-    delete q;
-    return;
-}
-void GrafoSimples::Insert(){
-    ifstream arquivo("g1.txt", ios::in);
-    if(arquivo.is_open()){
-        string linha, vertice, aresta;
-        while(getline(arquivo, linha)){
-            stringstream Entrada (linha);
-            Entrada >> vertice >> aresta;
-            for(int i = 0; i < Vertices.length(); i++){
-                if(Vertices[i] == vertice)
-                Vertices[i] = vertice;
-            }
-        arquivo.close();
+void GrafoSimples::Ler(string arquivo){
+    ifstream entrada(arquivo, ios::in);
+    if(entrada.is_open()){
+        Inserir(entrada);
+        entrada.close();
     }
     else{
         cout << "\nO Arquivo nao pode ser aberto";
         abort();
     }
 }
-void GrafoSimples::Inserir(TreePointer &r, string &chave1, string &chave2, string &chave3, bool &found){
-    if(r == NULL){
-        r = new TreeNode;
-        r->Entry = chave1;
-        if(chave2 != "X"){
-            r->LeftNode = new TreeNode;
-            r->LeftNode->Entry = chave2;
+void GrafoSimples::Inserir(ifstream &entrada){
+    string linha, vertice1, vertice2;
+    bool existeNoVetor;
+    while(getline(entrada, linha)) {
+        stringstream ss(linha);
+        getline(ss, vertice1, ';');
+        getline(ss, vertice2, ';');
+        // Verifica se o vertice1 já existe no vetor
+        existeNoVetor = false;
+        for(int i = 0; i < numDeVertices; i++){
+            if(vertices[i].indice[0] == vertice1[0]){
+                existeNoVetor = true;
+                break;
+            }
         }
-        if(chave3 !=  "X"){
-            r->RightNode = new TreeNode;
-            r->RightNode->Entry = chave3;
+        if(!existeNoVetor){
+            vertices[numDeVertices].indice = vertice1;
+            numDeVertices++;
         }
-        return;
+        // Verifica se o vertice2 já existe no vetor
+        existeNoVetor = false;
+        for(int i = 0; i < numDeVertices; i++){
+            if(vertices[i].indice[0] == vertice2[0]){
+                existeNoVetor = true;
+                break;
+            }
+        }
+        if(!existeNoVetor){
+            vertices[numDeVertices].indice = vertice2;
+            numDeVertices++;
+        }
+        for(int i = 0; i < numDeVertices; i++){
+            if(vertices[i].indice[0] == vertice1[0]){
+                Listar(vertice2, i);
+            }
+            if(vertices[i].indice[0] == vertice2[0]){
+                Listar(vertice1, i);
+            }
+        }
     }
-    else if (chave1 == r->Entry){
-        found = true;
-        if(chave2 != "X"){
-            r->LeftNode = new TreeNode;
-            r->LeftNode->Entry = chave2;
-            r->LeftNode->LeftNode = NULL;
-            r->LeftNode->RightNode = NULL;
-
+}
+void GrafoSimples::Listar(string indiceDoVertice, int i){
+    Vertice* novo = new Vertice;
+    novo->indice = indiceDoVertice;
+    novo->aresta = NULL;
+    if (vertices[i].aresta == NULL) {
+        vertices[i].aresta = novo;
+    }
+    else {
+        novo->aresta = vertices[i].aresta;
+        vertices[i].aresta = novo;
+    }
+}
+void GrafoSimples::ImprimirLista(){
+    for(int i = 0; i < numDeVertices; i++){
+        cout << vertices[i].indice;
+        if(vertices[i].aresta != NULL){
+            cout << " -> ";
+            ImprimirLista(vertices[i].aresta);
         }
-        else
-            r->LeftNode = NULL;
-        if(chave3 != "X"){
-            r->RightNode = new TreeNode;
-            r->RightNode->Entry = chave3;
-            r->RightNode->LeftNode = NULL;
-            r->RightNode->RightNode = NULL;
-        }
-        else
-            r->RightNode = NULL;
+        cout << endl;
+    }
+}
+void GrafoSimples::ImprimirLista(Vertice *vertice){
+    if(vertice->aresta == NULL){
+        cout << vertice->indice << "\n";
         return;
     }
     else{
-        if(r->LeftNode != NULL){
-            Insert(r->LeftNode, chave1, chave2, chave3, found);
+        cout << vertice->indice << " -> ";
+        ImprimirLista(vertice->aresta);
+    }
+}
 
-            if(found)
-                return;
+
+
+Digrafo::Digrafo(){
+    for(int i = 0; i < 8; i++){
+        for(int j = 0; j < 8; j++){
+            matrizDeAdjacencias[i][j] = 0;
         }
-        if(r->RightNode != NULL){
-            Insert(r->RightNode, chave1, chave2, chave3, found);
-            return;
-        }
     }
-    return;
+    numDeVertices = 0;
 }
-void GrafoSimples::Imprimir(){
-    if
-    cout << "G = ";
-    for(int i = 0; i < )
+Digrafo::~Digrafo(){
 }
-void GrafoSimples::Imprimir(TreePointer &r, int &Nodes, int &Leaves){
-    Nodes++;
-    int num = 0;
-    string sons;
-    if(r->LeftNode != NULL){
-        num++;
-        sons += "E";
-    }
-    if(r->RightNode != NULL){
-        num++;
-        sons += "D";
-    }
-    if(sons == "")
-        cout << r->Entry << " " << num << " F\n";
-    else
-        cout << r->Entry << " " << num << " " << sons << endl;
-    if(r->LeftNode == NULL && r->RightNode == NULL){
-        Leaves++;
-        return;
-    }
-    if(r->LeftNode != NULL){
-        Print(r->LeftNode, Nodes, Leaves);
-
-    }
-    if(r->RightNode != NULL)
-        Print(r->RightNode, Nodes, Leaves);
-    return;
-}
-void GrafoSimples::ImprimirGrafo(){
-
-    if(root != NULL){
-        int spaces = 0;
-        PrintTree( root, spaces);
+void Digrafo::Ler(string arquivo){
+    ifstream entrada(arquivo, ios::in);
+    if(entrada.is_open()){
+        Inserir(entrada);
+        entrada.close();
     }
     else{
-        cout << "\nÁrvore vazia\n";
+        cout << "\nO Arquivo nao pode ser aberto";
+        abort();
     }
 }
-void GrafoSimples::ImprimirGrafo(TreePointer &r, int spaces){
-    if(r->RightNode == NULL){
-        for(int i = 0; i < spaces+1; i++)
-            cout << "      ";
-        cout << "X" << endl;
+void Digrafo::Inserir(ifstream &entrada){
+    string linha, vertice1, vertice2;
+    bool existeNoVetor;
+    while(getline(entrada, linha)) {
+        stringstream ss(linha);
+        getline(ss, vertice1, ';');
+        getline(ss, vertice2, ';');
+        // Verifica se o vertice1 já existe no vetor
+        existeNoVetor = false;
+        for(int i = 0; i < numDeVertices; i++){
+            if(vertices[i].indice[0] == vertice1[0]){
+                existeNoVetor = true;
+                break;
+            }
+        }
+        if(!existeNoVetor){
+            vertices[numDeVertices].indice = vertice1;
+            numDeVertices++;
+        }
+        // Verifica se o vertice2 já existe no vetor
+        existeNoVetor = false;
+        for(int i = 0; i < numDeVertices; i++){
+            if(vertices[i].indice[0] == vertice2[0]){
+                existeNoVetor = true;
+                break;
+            }
+        }
+        if(!existeNoVetor){
+            vertices[numDeVertices].indice = vertice2;
+            numDeVertices++;
+        }
+        for(int i = 0; i < numDeVertices; i++){
+            if(vertices[i].indice[0] == vertice1[0])
+                Listar(vertice2, i);
+            }
+        }
     }
-    else
-        PrintTree(r->RightNode, spaces+1);
-    for(int i = 0; i < spaces; i++)
-        cout << "      ";
-    cout << r->Entry << endl;
-    if(r->LeftNode == NULL){
-        for(int i = 0; i < spaces+1; i++)
-            cout << "      ";
-        cout << "X" << endl;
+void Digrafo::Listar(string indiceDoVertice, int i){
+    Vertice* novo = new Vertice;
+    novo->indice = indiceDoVertice;
+    novo->aresta = NULL;
+    for(int j = 0; j < 8; j++){
+            if(vertices[j].indice == indiceDoVertice){
+                matrizDeAdjacencias[i][j] = 1;
+            }
+        }
+    if (vertices[i].aresta == NULL) {
+        vertices[i].aresta = novo;
     }
-    else
-        PrintTree(r->LeftNode, spaces+1);
+    else {
+        novo->aresta = vertices[i].aresta;
+        vertices[i].aresta = novo;
+    }
 }
+void Digrafo::ImprimirLista(){
+    for(int i = 0; i < numDeVertices; i++){
+        cout << vertices[i].indice;
+        if(vertices[i].aresta != NULL){
+            cout << " -> ";
+            ImprimirLista(vertices[i].aresta);
+        }
+        cout << endl;
+    }
+}
+void Digrafo::ImprimirLista(Vertice *vertice){
+    if(vertice->aresta == NULL){
+        cout << vertice->indice << "\n";
+        return;
+    }
+    else{
+        cout << vertice->indice << " -> ";
+        ImprimirLista(vertice->aresta);
+    }
+}
+void Digrafo::ImprimirMatriz(){
+    for(int i = 0; i < 8; i++){
+        for(int j = 0; j < 8; j++){
+            if(j % 8 == 0)
+                cout << endl;
+            cout << matrizDeAdjacencias[i][j] << " ";
+        }
+    }
+}
+
+
+GrafoPonderado::GrafoPonderado(){
+    for(int i = 0; i < 7; i++){
+        for(int j = 0; j < 7; j++){
+            matrizDeAdjacencias[i][j] = "0";
+        }
+    }
+    numDeVertices = 0;
+}
+GrafoPonderado::~GrafoPonderado(){
+}
+void GrafoPonderado::Ler(string arquivo){
+    ifstream entrada(arquivo, ios::in);
+    if(entrada.is_open()){
+        Inserir(entrada);
+        entrada.close();
+    }
+    else{
+        cout << "\nO Arquivo nao pode ser aberto";
+        abort();
+    }
+}
+void GrafoPonderado::Inserir(ifstream &entrada){
+    string linha, vertice1, vertice2, peso;
+    bool existeNoVetor;
+    while(getline(entrada, linha)) {
+        stringstream ss(linha);
+        getline(ss, vertice1, ';');
+        getline(ss, vertice2, ';');
+        getline(ss, peso, ';');
+        // Verifica se o vertice1 já existe no vetor*
+        existeNoVetor = false;
+        for(int i = 0; i < numDeVertices; i++){
+            if(vertices[i].indice[0] == vertice1[0]){
+                existeNoVetor = true;
+                break;
+            }
+        }
+        if(!existeNoVetor){
+            vertices[numDeVertices].indice = vertice1;
+            numDeVertices++;
+        }
+        // Verifica se o vertice2 já existe no vetor
+        existeNoVetor = false;
+        for(int i = 0; i < numDeVertices; i++){
+            if(vertices[i].indice[0] == vertice2[0]){
+                existeNoVetor = true;
+                break;
+            }
+        }
+        if(!existeNoVetor){
+            vertices[numDeVertices].indice = vertice2;
+            numDeVertices++;
+        }
+        for(int i = 0; i < numDeVertices; i++){
+            if(vertices[i].indice[0] == vertice1[0]){
+                Listar(vertice2, i, peso);
+            }
+            if(vertices[i].indice[0] == vertice2[0]){
+                Listar(vertice1, i, peso);
+            }
+        }
+    }
+}
+void GrafoPonderado::Listar(string indiceDoVertice, int i, string peso){
+    Vertice* novo = new Vertice;
+    novo->indice = indiceDoVertice;
+    novo->aresta = NULL;
+    novo->peso = peso;
+    for(int j = 0; j < 8; j++){
+            if(vertices[j].indice == indiceDoVertice){
+                matrizDeAdjacencias[i][j] = peso;
+            }
+        }
+    if (vertices[i].aresta == NULL) {
+        vertices[i].aresta = novo;
+    }
+    else {
+        novo->aresta = vertices[i].aresta;
+        vertices[i].aresta = novo;
+    }
+}
+void GrafoPonderado::ImprimirLista(){
+    for(int i = 0; i < numDeVertices; i++){
+        cout << vertices[i].indice;
+        if(vertices[i].aresta != NULL){
+            cout << " -> ";
+            ImprimirLista(vertices[i].aresta);
+        }
+        cout << endl;
+    }
+}
+void GrafoPonderado::ImprimirLista(Vertice *vertice){
+    if(vertice->aresta == NULL){
+        cout << vertice->indice << "\n";
+        return;
+    }
+    else{
+        cout << vertice->indice << " -> ";
+        ImprimirLista(vertice->aresta);
+    }
+}
+void GrafoPonderado::ImprimirMatriz(){
+    for(int i = 0; i < 7; i++){
+        for(int j = 0; j < 7; j++){
+            if(j % 7 == 0)
+                cout << endl;
+            if(matrizDeAdjacencias[i][j].length() == 1)
+                cout << " ";
+            cout << matrizDeAdjacencias[i][j] << " ";
+        }
+    }
+}
+
 
